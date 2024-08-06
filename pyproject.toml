@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "zh-voice-gtts-generator"
+version = "0.1.0"
+description = ""
+authors = ["s-sasaki-earthsea-wizard <syota.sasaki@earthsea-wizard.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+gtts = "^2.5.2"
+pydub = "^0.25.1"
+simpleaudio = "^1.0.4"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
