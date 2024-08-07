@@ -202,3 +202,8 @@ Desktop.ini
 
 # Python version management
 .python-version
+
+# Ignore audio files
+*.mp3
+*.wav
+*.ogg
