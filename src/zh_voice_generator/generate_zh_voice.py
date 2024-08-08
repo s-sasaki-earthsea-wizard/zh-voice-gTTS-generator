@@ -2,6 +2,8 @@ from gtts import gTTS
 from pydub import AudioSegment
 from pydub.playback import play
 import datetime
+import os
+import argparse
 
 def generate_zh_voice(input_zn_text, output_sound_file=None):
     if output_sound_file is None:
@@ -19,8 +21,18 @@ def generate_zh_voice(input_zn_text, output_sound_file=None):
 
     print(f"Voice generated and saved to {output_sound_file}")
 
+def get_args():
+    # Setup argument parser
+    parser = argparse.ArgumentParser(description='Generate Chinese voice from text')
+    parser.add_argument('text', type=str, help='Chinese text to convert to voice')
+    parser.add_argument('--output', type=str, help='Output MP3 filename', default=None)
+    
+    # Parse and return arguments
+    return parser.parse_args()
+
 if __name__ == "__main__":
-    # Chinese text for testing
-    sample_text = "你好，这是一个示例。"
-    sample_filename = "sample.mp3"
-    generate_zh_voice(sample_text, sample_filename)
+    # Get command-line arguments
+    args = get_args()
+
+    # Generate voice
+    generate_zh_voice(args.output, args.output)
