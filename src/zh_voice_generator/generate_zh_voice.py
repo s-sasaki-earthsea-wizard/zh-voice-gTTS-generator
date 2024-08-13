@@ -1,14 +1,15 @@
+import sys
+import os
+import argparse
 from gtts import gTTS
 from pydub import AudioSegment
 from pydub.playback import play
-import datetime
-import os
-import argparse
+
+# Add the project root directory to the system path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.audio_utils import prepare_output_path
 
 def generate_zh_voice(input_zn_text, output_sound_file=None):
-    # Avoid overwriting existing files by appending timestamp to filename
-    output_sound_file = avoid_overwrite_using_datetime(output_sound_file)
-
     # Generate and save the zn voice file using Google Text-to-Speech (gTTS)
     tts = gTTS(input_zn_text, lang='zh')
     tts.save(output_sound_file)
@@ -23,26 +24,18 @@ def get_args():
     # Setup argument parser
     parser = argparse.ArgumentParser(description='Generate Chinese voice from text')
     parser.add_argument('text', type=str, help='Chinese text to convert to voice')
-    parser.add_argument('--output', type=str, help='Output MP3 filename', default=None)
+    parser.add_argument('--output-dir', type=str, help='Output directory', default='output')
+    parser.add_argument('--filename', type=str, help='Output MP3 filename', default=None)
     
     # Parse and return arguments
     return parser.parse_args()
-
-def avoid_overwrite_using_datetime(output_sound_file):
-    if output_sound_file is None:
-        # Use the current timestamp to generate a unique filename if not provided
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H;%M;%S") # Avoid using ':' in filename for Windows compatibility
-        return f"output_{timestamp}.mp3"
-    elif os.path.exists(output_sound_file):
-        # If the filename already exists, append the current timestamp to avoid overwriting
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        return f"{os.path.splitext(output_sound_file)[0]}_{timestamp}.mp3"
-    else:
-        return output_sound_file
 
 if __name__ == "__main__":
     # Get command-line arguments
     args = get_args()
 
+    # Prepare output path
+    output_sound_file = prepare_output_path(args.output_dir, args.filename)
+    
     # Generate voice
-    generate_zh_voice(args.text, args.output)
+    generate_zh_voice(args.text, output_sound_file)
